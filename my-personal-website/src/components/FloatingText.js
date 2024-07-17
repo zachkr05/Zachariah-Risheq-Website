@@ -7,14 +7,14 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 // Extend the THREE namespace with TextGeometry
 extend({ TextGeometry });
 
-function TextMesh({ text, position }) {
+function TextMesh({ text, position, fontSize }) {
     const mesh = useRef();
     const font = useLoader(FontLoader, '/fonts/helvetiker_regular.typeface.json');
 
     const textOptions = {
         font: font,
-        size: 1,
-        height: 0.2,
+        size: fontSize,
+        height: 0.1, // Reduced depth
     };
 
     useFrame(({ clock }) => {
@@ -31,21 +31,38 @@ function TextMesh({ text, position }) {
 }
 
 function FloatingText({ techStack }) {
+    const fontSize = 1 / techStack.length; // Adjust font size based on the number of items
+
     return (
-        <Canvas camera={{ position: [0, 0, 10], fov: 50 }}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} />
-            <Suspense fallback={null}>
-                {techStack.map((tech, index) => (
-                    <TextMesh
-                        key={index}
-                        text={tech}
-                        position={[index * 2 - (techStack.length - 1), 0, 0]} // Initial position along X-axis
-                    />
-                ))}
-            </Suspense>
-            <OrbitControls />
-        </Canvas>
+        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+            <Canvas camera={{ position: [0, 0, 10], fov: 50 }}>
+                <ambientLight intensity={0.5} />
+                <pointLight position={[10, 10, 10]} />
+                <Suspense fallback={null}>
+                    {techStack.map((tech, index) => (
+                        <TextMesh
+                            key={index}
+                            text={tech}
+                            position={[0, (techStack.length / 2 - index) * fontSize * 2, 0]} // Position items vertically
+                            fontSize={fontSize}
+                        />
+                    ))}
+                </Suspense>
+                <OrbitControls />
+            </Canvas>
+            <div className="hover-message" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
+                <div className="hover-text" style={{ display: 'none', backgroundColor: 'rgba(0, 0, 0, 0.5)', color: '#fff', padding: '10px', borderRadius: '5px' }}>
+                    Zoom when you hover over it temporarily
+                </div>
+            </div>
+            <style>
+                {`
+                .hover-message:hover .hover-text {
+                    display: block;
+                }
+                `}
+            </style>
+        </div>
     );
 }
 

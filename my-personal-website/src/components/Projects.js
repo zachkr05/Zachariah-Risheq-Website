@@ -1,7 +1,7 @@
 import React from 'react';
 import FloatingText from './FloatingText';
 
-const techStack = ['PyTorch'];
+const techStack = ['PyTorch', 'TensorFlow', 'Keras', 'Scikit-learn', 'Pandas', 'NumPy'];
 
 function Projects() {
     return (
@@ -17,7 +17,7 @@ function Projects() {
                         </h3>
                         <p className="mt-2">Description of project 1.</p>
                     </div>
-                    <div className="w-1/3 h-48">
+                    <div className="w-1/3 h-48" style={{ position: 'relative' }}>
                         <FloatingText techStack={techStack} />
                     </div>
                 </div>
@@ -30,7 +30,7 @@ function Projects() {
                         </h3>
                         <p className="mt-2">Description of project 2.</p>
                     </div>
-                    <div className="w-1/3 h-48">
+                    <div className="w-1/3 h-48" style={{ position: 'relative' }}>
                         <FloatingText techStack={techStack} />
                     </div>
                 </div>
